@@ -9,9 +9,6 @@ import com.example.a27299.cats.R
 class LoginActivity :AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor= Color.WHITE
-        }
         setContentView(R.layout.activity_login)
     }
 }
