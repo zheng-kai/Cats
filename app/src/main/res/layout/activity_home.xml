@@ -5,6 +5,7 @@
     android:id="@+id/drawer_home"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <android.support.v7.widget.Toolbar
@@ -17,7 +18,21 @@
                 android:padding="12dp"
                 android:layout_width="48dp"
                 android:layout_height="48dp"/>
+
         </android.support.v7.widget.Toolbar>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_home"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_home"
+            app:tabTextColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
+            app:tabIndicatorColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
     <android.support.design.widget.NavigationView
         app:headerLayout="@layout/navigation_head"

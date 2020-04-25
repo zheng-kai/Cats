@@ -13,5 +13,8 @@ class HomeActivity : AppCompatActivity (){
         iv_home_menu.setOnClickListener {
             drawer_home.openDrawer(Gravity.START)
         }
+        vp_home.adapter = HomeFragmentPagerAdapter(supportFragmentManager,
+                listOf(HomeFragment.newInstance(HomeFragment.SPECIES_TITLE),HomeFragment.newInstance(HomeFragment.CATS_TITLE)))
+        tab_home.setupWithViewPager(vp_home)
     }
 }
