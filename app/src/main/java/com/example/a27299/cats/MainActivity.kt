@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.statusBarColor = Color.WHITE
         }
-//            startActivity(Intent(this,HomeActivity::class.java))
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, HomeActivity::class.java))
+//        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }
