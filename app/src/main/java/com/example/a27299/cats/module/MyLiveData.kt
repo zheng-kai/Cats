@@ -1,22 +1,31 @@
 package com.example.a27299.cats.module
 
 import android.arch.lifecycle.MutableLiveData
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 object MyLiveData {
     val mutableLiveData = MutableLiveData<ArrayList<PicsBean>>()
     suspend fun getPics(order: String = "RANDOM", type: String = "jpg,png", limit: Int = 50, category: Int? = null) {
         val response = when (category) {
             null -> {
-                Service.getPics(order, type, limit).execute()
+                Module.service.getPics(order, type, limit).execute()
             }
             else -> {
 //                Service.getPics(order, type, limit, category).execute()
-                Service.getPics(order, type, limit).execute()
+                Module.service.getPics(order, type, limit).execute()
 
             }
         }
-        mutableLiveData.value = mutableLiveData.value.apply {
-            this?.addAll(response.body() ?: arrayListOf())
+        GlobalScope.launch(Main) {
+
+            mutableLiveData.value = ArrayList<PicsBean>().apply {
+                addAll(mutableLiveData.value?: arrayListOf())
+                addAll(response.body()?: arrayListOf())
+            }
         }
+
+
     }
 }

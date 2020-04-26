@@ -13,8 +13,11 @@ import com.example.a27299.cats.module.PicsBean
 import kotlinx.android.synthetic.main.fragment_home_pics.*
 import kotlinx.android.synthetic.main.fragment_home_pics.view.*
 import kotlinx.android.synthetic.main.fragment_home_pics.view.rv_home_fragment_pics
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PicsFragment : HomeFragment() {
     val PAGE_SIZE = 50
@@ -30,13 +33,22 @@ class PicsFragment : HomeFragment() {
         view.srl_home_fragment_pics.setOnRefreshListener {
             GlobalScope.launch {
                 MyLiveData.getPics(limit = PAGE_SIZE)
-                view.srl_home_fragment_pics.isRefreshing = false
+                GlobalScope.launch(Main) {
+                    view.srl_home_fragment_pics.isRefreshing = false
+                    val count = view.rv_home_fragment_pics.adapter.itemCount
+                    view.rv_home_fragment_pics.adapter.notifyItemRangeInserted(count, count + PAGE_SIZE)
+                }
             }
         }
         view.rv_home_fragment_pics.addOnScrollListener(object : EndlessScrollListener() {
             override fun loadMore() {
                 GlobalScope.launch {
                     MyLiveData.getPics(limit = PAGE_SIZE)
+                    GlobalScope.launch(Main) {
+                        val count = view.rv_home_fragment_pics.adapter.itemCount
+
+                        view.rv_home_fragment_pics.adapter.notifyItemRangeInserted(count, count + PAGE_SIZE)
+                    }
                 }
             }
 
@@ -44,6 +56,9 @@ class PicsFragment : HomeFragment() {
         )
         GlobalScope.launch {
             MyLiveData.getPics(limit = PAGE_SIZE)
+            GlobalScope.launch(Main) {
+                view.rv_home_fragment_pics.adapter.notifyItemRangeInserted(0,PAGE_SIZE)
+            }
         }
 
         return view
@@ -70,5 +85,6 @@ abstract class EndlessScrollListener : RecyclerView.OnScrollListener() {
         super.onScrolled(recyclerView, dx, dy)
         slidingUp = dy > 0
     }
+
     abstract fun loadMore()
 }

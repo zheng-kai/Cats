@@ -25,9 +25,8 @@ object Module {
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
-    inline operator fun <reified T> invoke(): T = retrofit.create(T::class.java)
-
+    val service = retrofit.create(Service::class.java)
 }
