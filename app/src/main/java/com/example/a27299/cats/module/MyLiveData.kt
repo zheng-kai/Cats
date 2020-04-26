@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 object MyLiveData {
     val mutableLiveData = MutableLiveData<ArrayList<PicsBean>>()
-    suspend fun getPics(order: String = "RANDOM", type: String = "jpg,png", limit: Int = 50, category: Int? = null) {
+    suspend fun getPics(order: String = "RANDOM", type: Array<String> = arrayOf("jpg","png"), limit: Int = 50, category: Int? = null) {
         val response = when (category) {
             null -> {
                 Module.service.getPics(order, type, limit).execute()

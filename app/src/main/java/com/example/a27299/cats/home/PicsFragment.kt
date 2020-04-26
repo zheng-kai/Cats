@@ -23,11 +23,19 @@ class PicsFragment : HomeFragment() {
     val PAGE_SIZE = 50
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_home_pics, container, false)
-        view.rv_home_fragment_pics.adapter = MyAdapter(context)
-        view.rv_home_fragment_pics.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val adapter = MyAdapter(context)
+        val layoutManager =  StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
+            gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+        }
+        view.rv_home_fragment_pics.apply {
+            this.adapter = adapter
+            addItemDecoration(MyItemDecoration(context,10f,2))
+            this.layoutManager = layoutManager
+        }
+
         MyLiveData.mutableLiveData.observe(this, Observer<ArrayList<PicsBean>> {
             it?.let {
-                rv_home_fragment_pics.adapter.notifyItemRangeInserted(it.size - PAGE_SIZE, it.size)
+                adapter.notifyItemRangeInserted(it.size-PAGE_SIZE,PAGE_SIZE)
             }
         })
         view.srl_home_fragment_pics.setOnRefreshListener {
@@ -35,20 +43,23 @@ class PicsFragment : HomeFragment() {
                 MyLiveData.getPics(limit = PAGE_SIZE)
                 GlobalScope.launch(Main) {
                     view.srl_home_fragment_pics.isRefreshing = false
-                    val count = view.rv_home_fragment_pics.adapter.itemCount
-                    view.rv_home_fragment_pics.adapter.notifyItemRangeInserted(count, count + PAGE_SIZE)
                 }
             }
         }
+        view.rv_home_fragment_pics.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+            }
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                layoutManager.invalidateSpanAssignments()
+            }
+        })
         view.rv_home_fragment_pics.addOnScrollListener(object : EndlessScrollListener() {
             override fun loadMore() {
                 GlobalScope.launch {
                     MyLiveData.getPics(limit = PAGE_SIZE)
-                    GlobalScope.launch(Main) {
-                        val count = view.rv_home_fragment_pics.adapter.itemCount
-
-                        view.rv_home_fragment_pics.adapter.notifyItemRangeInserted(count, count + PAGE_SIZE)
-                    }
                 }
             }
 
@@ -56,13 +67,12 @@ class PicsFragment : HomeFragment() {
         )
         GlobalScope.launch {
             MyLiveData.getPics(limit = PAGE_SIZE)
-            GlobalScope.launch(Main) {
-                view.rv_home_fragment_pics.adapter.notifyItemRangeInserted(0,PAGE_SIZE)
-            }
+
         }
 
         return view
     }
+
 }
 
 abstract class EndlessScrollListener : RecyclerView.OnScrollListener() {

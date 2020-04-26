@@ -13,8 +13,8 @@ interface Service {
 
     @GET("images/search")
     fun getPics(
-            @Query("order") order: String = "RANDOM",
-            @Query("mime_type") type: String = "jpg,png",
-            @Query("limit") limit: Int = 50): Call<ArrayList<PicsBean>>
+            @Query("order") order: String ,
+            @Query("mime_type") type: Array<String> ,
+            @Query("limit") limit:Int): Call<ArrayList<PicsBean>>
 
 }
