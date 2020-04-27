@@ -44,5 +44,5 @@ dependencies {
     implementation "android.arch.lifecycle:livedata:1.1.1"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
-
+    implementation 'q.rorbin:VerticalTabLayout:1.2.5'
 }
