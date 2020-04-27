@@ -13,13 +13,22 @@ object Module {
         speciesLiveData.value = arrayListOf()
     }
     suspend fun getAllBreeds() = ServiceApi.service.getAllBreeds()
-    suspend fun addBreedDetail(id:String){
-        val detail = ServiceApi.service.getBreedPic(id).execute().body()
-        detail?.let {
+    suspend fun addBreedDetail(ids:MutableList<String>){
+        val list = ArrayList<BreedDetailItem>()
+        for (id in ids){
+            val detail = ServiceApi.service.getBreedPic(id).execute().body()
+            detail?.apply {
+                list.add(get(0))
+            }
+        }
+        list.let {
             if(it.size>0){
-                speciesLiveData.value = speciesLiveData.value?.apply {
-                    this.addAll(it)
+                GlobalScope.launch(Main) {
+                    speciesLiveData.value = speciesLiveData.value?.apply {
+                        this.addAll(it)
+                    }
                 }
+
             }
         }
     }

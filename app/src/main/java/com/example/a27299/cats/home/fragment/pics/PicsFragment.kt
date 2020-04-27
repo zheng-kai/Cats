@@ -54,6 +54,7 @@ class PicsFragment : HomeFragment() {
             override fun loadMore() {
                 GlobalScope.launch {
                     Module.getPics(limit = PAGE_SIZE)
+                    enable()
                 }
             }
 

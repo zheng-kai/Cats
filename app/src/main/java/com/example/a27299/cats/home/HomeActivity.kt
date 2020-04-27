@@ -9,7 +9,7 @@ import com.example.a27299.cats.home.fragment.HomeFragmentPagerAdapter
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : AppCompatActivity (){
+class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -17,7 +17,7 @@ class HomeActivity : AppCompatActivity (){
             drawer_home.openDrawer(Gravity.START)
         }
         vp_home.adapter = HomeFragmentPagerAdapter(supportFragmentManager,
-                listOf(HomeFragment.newInstance(HomeFragment.SPECIES_TITLE), HomeFragment.newInstance(HomeFragment.PICS_TITLE)))
+                listOf(HomeFragment.newInstance(HomeFragment.PICS_TITLE), HomeFragment.newInstance(HomeFragment.SPECIES_TITLE)))
         tab_home.setupWithViewPager(vp_home)
         Module.init()
     }

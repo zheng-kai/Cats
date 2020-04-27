@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_home_pic.view.*
 class PicsViewHolder(itemView: View, val ivPic: ImageView) : RecyclerView.ViewHolder(itemView)
 class PicsAdapter(val context: Context?) : RecyclerView.Adapter<PicsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PicsViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_home_pic, null)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_home_pic, parent,false)
         return PicsViewHolder(view, view.iv_item_pic)
     }
 
