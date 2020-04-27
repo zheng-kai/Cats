@@ -1,4 +1,4 @@
-package com.example.a27299.cats.home
+package com.example.a27299.cats.home.fragment.pics
 
 import android.content.Context
 import android.graphics.Rect

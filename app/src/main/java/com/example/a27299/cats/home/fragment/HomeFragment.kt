@@ -1,11 +1,8 @@
-package com.example.a27299.cats.home
+package com.example.a27299.cats.home.fragment
 
-import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.example.a27299.cats.R
+import com.example.a27299.cats.home.fragment.pics.PicsFragment
+import com.example.a27299.cats.home.fragment.species.SpeciesFragment
 
 abstract class HomeFragment : Fragment() {
     var title = ""

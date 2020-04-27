@@ -110,3 +110,13 @@ data class Category(
     "height": 2336
 }
  */
+
+
+
+data class BreedDetailItem(
+    val breeds: List<BreedBean>,
+    val height: Int,
+    val id: String,
+    val url: String,
+    val width: Int
+)

@@ -1,8 +1,9 @@
-package com.example.a27299.cats.home
+package com.example.a27299.cats.home.fragment
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import com.example.a27299.cats.home.fragment.HomeFragment
 
 
 class HomeFragmentPagerAdapter(fm: FragmentManager, private val fragments:List<HomeFragment>): FragmentPagerAdapter(fm) {
