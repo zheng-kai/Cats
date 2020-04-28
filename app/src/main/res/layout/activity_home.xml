@@ -58,6 +58,7 @@
         app:menu="@menu/navigation_menu" />
 
     <include
+        android:id="@+id/layout_right"
         layout="@layout/activity_home_right"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

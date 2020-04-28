@@ -14,7 +14,7 @@ object ServiceApi {
 
     val client = OkHttpClient.Builder()
             .addInterceptor(AuthorizationInterceptor)
-            .retryOnConnectionFailure(true)
+            .retryOnConnectionFailure(false)
             .connectTimeout(20, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(20, TimeUnit.SECONDS)
