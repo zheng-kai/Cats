@@ -31,6 +31,11 @@ class PicsFragment : HomeFragment() {
         }
         Module.mutableLiveData.observe(this, Observer<ArrayList<PicsBean>> {
             it?.let {
+                if(it.size == 0){
+                    view.tv_home_fragment_loading_pics.visibility = View.VISIBLE
+                }else{
+                    view.tv_home_fragment_loading_pics.visibility = View.INVISIBLE
+                }
                 if(it.size>num){
                     adapter.notifyItemRangeInserted(num,it.size-num)
 

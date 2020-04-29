@@ -1,6 +1,5 @@
 package com.example.a27299.cats.home.fragment.species
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -10,12 +9,9 @@ import android.view.ViewGroup
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.util.EndlessScrollListener
-import com.example.a27299.cats.module.BreedBean
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.fragment_home_species.view.*
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -52,9 +48,9 @@ class SpeciesFragment : HomeFragment() {
         Module.speciesLiveData.observe(this, Observer {
             it?.let {
                 if(it.size == 0){
-                    view.tv_home_fragment_loading.visibility = View.VISIBLE
+                    view.tv_home_fragment_loading_species.visibility = View.VISIBLE
                 }else{
-                    view.tv_home_fragment_loading.visibility = View.INVISIBLE
+                    view.tv_home_fragment_loading_species.visibility = View.INVISIBLE
                 }
                 val r = num.get().rem(10)
                 if (r == 0) {
