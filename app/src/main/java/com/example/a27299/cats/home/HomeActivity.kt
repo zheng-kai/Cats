@@ -1,5 +1,6 @@
 package com.example.a27299.cats.home
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -9,8 +10,10 @@ import android.view.View
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.HomeFragmentPagerAdapter
+import com.example.a27299.cats.login.LoginActivity
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.navigation_head.view.*
 import q.rorbin.verticaltablayout.VerticalTabLayout
 import q.rorbin.verticaltablayout.adapter.TabAdapter
 import q.rorbin.verticaltablayout.widget.ITabView
@@ -23,6 +26,17 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        initHome()
+        initRight()
+        initLeft()
+    }
+    private fun initLeft(){
+        val headerView = nv_home_left.getHeaderView(0)
+        headerView.civ_home_left_avatar.setOnClickListener {
+            startActivity(Intent(this,LoginActivity::class.java))
+        }
+    }
+    private fun initRight(){
         verticalTabLayout = layout_right.findViewById(R.id.vtl_home_right)
         verticalTabLayout.setTabAdapter(object : TabAdapter {
             override fun getIcon(position: Int): ITabView.TabIcon? = null
@@ -42,6 +56,8 @@ class HomeActivity : AppCompatActivity() {
             override fun getCount(): Int = tabTitleList.size
 
         })
+    }
+    private fun initHome(){
         iv_home_menu.setOnClickListener {
             drawer_home.openDrawer(Gravity.START)
         }
