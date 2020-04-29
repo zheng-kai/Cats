@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:text="10"
+    android:id="@+id/cb_item_home_right_choice"
     android:textSize="16sp"
     android:padding="10dp"
     android:layout_width="wrap_content"

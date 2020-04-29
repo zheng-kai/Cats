@@ -8,9 +8,17 @@ import kotlinx.coroutines.launch
 object Module {
     val mutableLiveData = MutableLiveData<ArrayList<PicsBean>>()
     val speciesLiveData = MutableLiveData<ArrayList<BreedDetailItem>>()
+    val selectedLiveData = MutableLiveData<ArrayList<String>>()
     fun init(){
+        selectedLiveData.value = arrayListOf()
         mutableLiveData.value = arrayListOf()
         speciesLiveData.value = arrayListOf()
+    }
+    fun addSelected(str:String){
+        selectedLiveData.value?.add(str)
+    }
+    fun remove(str: String){
+        selectedLiveData.value?.remove(str)
     }
     suspend fun getAllBreeds() = ServiceApi.service.getAllBreeds()
     suspend fun addBreedDetail(ids:MutableList<String>){

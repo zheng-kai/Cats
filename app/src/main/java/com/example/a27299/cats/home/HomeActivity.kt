@@ -1,28 +1,36 @@
 package com.example.a27299.cats.home
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import android.view.Gravity
 import android.view.View
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.HomeFragmentPagerAdapter
+import com.example.a27299.cats.home.fragment.selector.ChoicesFragment
 import com.example.a27299.cats.login.LoginActivity
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_home_right.*
 import kotlinx.android.synthetic.main.navigation_head.view.*
 import q.rorbin.verticaltablayout.VerticalTabLayout
 import q.rorbin.verticaltablayout.adapter.TabAdapter
 import q.rorbin.verticaltablayout.widget.ITabView
 import q.rorbin.verticaltablayout.widget.ITabView.TabTitle
+import q.rorbin.verticaltablayout.widget.TabView
 
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var verticalTabLayout: VerticalTabLayout
     private val tabTitleList = listOf("图片种类","品种")
+    private lateinit var tabFragmentList :List<Fragment>
+    private lateinit var rightAdapter:SelectedAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -37,7 +45,25 @@ class HomeActivity : AppCompatActivity() {
         }
     }
     private fun initRight(){
+        tabFragmentList = listOf(ChoicesFragment(),ChoicesFragment())
+
+        rv_home_right_selected.layoutManager = GridLayoutManager(this,5)
+        rightAdapter = SelectedAdapter(this)
+        rv_home_right_selected.adapter = rightAdapter
+        Module.selectedLiveData.observe(this, Observer {
+            rightAdapter.notifyDataSetChanged()
+        })
         verticalTabLayout = layout_right.findViewById(R.id.vtl_home_right)
+        verticalTabLayout.addOnTabSelectedListener(object :VerticalTabLayout.OnTabSelectedListener{
+            override fun onTabReselected(tab: TabView?, position: Int) {
+
+            }
+
+            override fun onTabSelected(tab: TabView?, position: Int) {
+                
+            }
+
+        })
         verticalTabLayout.setTabAdapter(object : TabAdapter {
             override fun getIcon(position: Int): ITabView.TabIcon? = null
             override fun getBadge(position: Int): ITabView.TabBadge? = null
