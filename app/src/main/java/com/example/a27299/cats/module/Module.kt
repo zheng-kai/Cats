@@ -15,10 +15,14 @@ object Module {
         speciesLiveData.value = arrayListOf()
     }
     fun addSelected(str:String){
-        selectedLiveData.value?.add(str)
+        selectedLiveData.value = selectedLiveData.value?.apply {
+            add(str)
+        }
     }
     fun remove(str: String){
-        selectedLiveData.value?.remove(str)
+        selectedLiveData.value = selectedLiveData.value?.apply {
+            remove(str)
+        }
     }
     suspend fun getAllBreeds() = ServiceApi.service.getAllBreeds()
     suspend fun addBreedDetail(ids:MutableList<String>){

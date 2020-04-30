@@ -18,6 +18,7 @@ import com.example.a27299.cats.login.LoginActivity
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home_right.*
+import kotlinx.android.synthetic.main.activity_home_right.view.*
 import kotlinx.android.synthetic.main.navigation_head.view.*
 import q.rorbin.verticaltablayout.VerticalTabLayout
 import q.rorbin.verticaltablayout.adapter.TabAdapter
@@ -45,8 +46,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
     private fun initRight(){
-        tabFragmentList = listOf(ChoicesFragment(),ChoicesFragment())
-
+        tabFragmentList = listOf(ChoicesFragment.newInstance(arrayOf("aaa","bbb","qwefqwer","qfhqpwofhqpowfhqp234")),ChoicesFragment.newInstance(arrayOf("ccc","ddd","eee","fdf","afqwe")))
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(layout_right.fl_home_right_choices.id,tabFragmentList[0])
+        transaction.commit()
         rv_home_right_selected.layoutManager = GridLayoutManager(this,5)
         rightAdapter = SelectedAdapter(this)
         rv_home_right_selected.adapter = rightAdapter
@@ -60,7 +63,9 @@ class HomeActivity : AppCompatActivity() {
             }
 
             override fun onTabSelected(tab: TabView?, position: Int) {
-                
+                val t = supportFragmentManager.beginTransaction()
+                t.replace(layout_right.fl_home_right_choices.id,tabFragmentList[position])
+                t.commit()
             }
 
         })
