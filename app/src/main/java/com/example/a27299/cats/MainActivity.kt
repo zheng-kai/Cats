@@ -1,18 +1,15 @@
 package com.example.a27299.cats
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
 import com.example.a27299.cats.home.HomeActivity
-import com.example.a27299.cats.login.LoginActivity
+import com.example.a27299.cats.module.Module
+import com.example.a27299.cats.module.ServiceApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +20,10 @@ class MainActivity : AppCompatActivity() {
         }
         startActivity(Intent(this, HomeActivity::class.java))
 //        startActivity(Intent(this, LoginActivity::class.java))
+
+        GlobalScope.launch {
+            Module.saveCategories(ServiceApi.service.getCategories().execute().body()?: arrayListOf())
+        }
         finish()
     }
 }

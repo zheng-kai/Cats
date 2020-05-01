@@ -8,11 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ServiceApi {
-    val BASE_URL = "https://api.thecatapi.com/v1/"
+    private val BASE_URL = "https://api.thecatapi.com/v1/"
     private val loggingInterceptor = HttpLoggingInterceptor()
             .apply { level = HttpLoggingInterceptor.Level.BODY }
 
-    val client = OkHttpClient.Builder()
+    private val client = OkHttpClient.Builder()
             .addInterceptor(AuthorizationInterceptor)
             .retryOnConnectionFailure(false)
             .connectTimeout(20, TimeUnit.SECONDS)
@@ -21,12 +21,12 @@ object ServiceApi {
             .addNetworkInterceptor(loggingInterceptor)
             .build()
 
-    val retrofit = Retrofit.Builder()
+    private val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
 //            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
-    val service = retrofit.create(Service::class.java)
+    val service: Service = retrofit.create(Service::class.java)
 }

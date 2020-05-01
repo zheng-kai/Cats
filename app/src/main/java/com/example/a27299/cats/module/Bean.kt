@@ -54,7 +54,7 @@ data class Weight(
         val metric: String
 )
 
-data class Category(
+data class  Category(
         val id: Int,
         val name: String
 )
@@ -120,3 +120,5 @@ data class BreedDetailItem(
     val url: String,
     val width: Int
 )
+
+

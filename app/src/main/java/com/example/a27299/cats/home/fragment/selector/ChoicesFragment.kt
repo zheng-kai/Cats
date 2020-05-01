@@ -15,10 +15,10 @@ import java.util.*
 
 class ChoicesFragment() : Fragment() {
     companion object {
-        fun newInstance(data: Array<String>) = ChoicesFragment().apply {
+        fun newInstance(data: ArrayList<String>) = ChoicesFragment().apply {
             arguments = Bundle().apply {
-                putStringArray("data", data)
-                Log.d("MyData", data.contentToString())
+                putStringArrayList("data", data)
+                Log.d("MyData", data.toString())
             }
         }
 
@@ -26,10 +26,10 @@ class ChoicesFragment() : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_home_right_choices, container, false)
-        val data=arguments?.getStringArray("data")?: arrayOf()
+        val data = arguments?.getStringArrayList("data") ?: arrayListOf()
         view.rv_home_right_choices.layoutManager = GridLayoutManager(context, 2)
         view.rv_home_right_choices.adapter = ChoicesAdapter(context, data)
-        Log.d("MyData",data.contentToString())
+        Log.d("MyData", data.toString())
 
         return view
 

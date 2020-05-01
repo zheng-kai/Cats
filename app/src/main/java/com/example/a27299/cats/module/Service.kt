@@ -16,12 +16,16 @@ interface Service {
     fun getPics(
             @Query("order") order: String,
             @Query("mime_types") type: Array<String>,
-            @Query("limit") limit: Int): Call<ArrayList<PicsBean>>
+            @Query("limit") limit: Int,
+            @Query("category_id") category_ids: Array<Int>? = null): Call<ArrayList<PicsBean>>
 
     @GET("images/search")
     fun getBreedPic(@Query("breed_ids") breedId: String,
                     @Query("order") order: String = "ASC"): Call<ArrayList<BreedDetailItem>>
 
     @GET("breeds")
-    fun getAllBreeds():Call<ArrayList<BreedBean>>
+    fun getAllBreeds(): Call<ArrayList<BreedBean>>
+
+    @GET("categories")
+    fun getCategories(): Call<ArrayList<Category>>
 }

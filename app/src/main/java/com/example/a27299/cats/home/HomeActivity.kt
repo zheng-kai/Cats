@@ -2,6 +2,7 @@ package com.example.a27299.cats.home
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -29,9 +30,9 @@ import q.rorbin.verticaltablayout.widget.TabView
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var verticalTabLayout: VerticalTabLayout
-    private val tabTitleList = listOf("图片种类","品种")
-    private lateinit var tabFragmentList :List<Fragment>
-    private lateinit var rightAdapter:SelectedAdapter
+    private val tabTitleList = listOf("种类", "品种")
+    private lateinit var tabFragmentList: List<Fragment>
+    private lateinit var rightAdapter: SelectedAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -39,32 +40,39 @@ class HomeActivity : AppCompatActivity() {
         initRight()
         initLeft()
     }
-    private fun initLeft(){
+
+    private fun initLeft() {
         val headerView = nv_home_left.getHeaderView(0)
         headerView.civ_home_left_avatar.setOnClickListener {
-            startActivity(Intent(this,LoginActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
-    private fun initRight(){
-        tabFragmentList = listOf(ChoicesFragment.newInstance(arrayOf("aaa","bbb","qwefqwer","qfhqpwofhqpowfhqp234")),ChoicesFragment.newInstance(arrayOf("ccc","ddd","eee","fdf","afqwe")))
+
+    private fun initRight() {
+
+        tabFragmentList = listOf(
+                ChoicesFragment.newInstance(ArrayList(Module.getCategories()?.map { it.name }
+                        ?: listOf())),
+                ChoicesFragment.newInstance(arrayListOf("1", "2", "3", "4", "5")))
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(layout_right.fl_home_right_choices.id,tabFragmentList[0])
+        transaction.add(layout_right.fl_home_right_choices.id, tabFragmentList[0])
         transaction.commit()
-        rv_home_right_selected.layoutManager = GridLayoutManager(this,5)
+
+        rv_home_right_selected.layoutManager = GridLayoutManager(this, 2)
         rightAdapter = SelectedAdapter(this)
         rv_home_right_selected.adapter = rightAdapter
         Module.selectedLiveData.observe(this, Observer {
             rightAdapter.notifyDataSetChanged()
         })
         verticalTabLayout = layout_right.findViewById(R.id.vtl_home_right)
-        verticalTabLayout.addOnTabSelectedListener(object :VerticalTabLayout.OnTabSelectedListener{
+        verticalTabLayout.addOnTabSelectedListener(object : VerticalTabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabView?, position: Int) {
 
             }
 
             override fun onTabSelected(tab: TabView?, position: Int) {
                 val t = supportFragmentManager.beginTransaction()
-                t.replace(layout_right.fl_home_right_choices.id,tabFragmentList[position])
+                t.replace(layout_right.fl_home_right_choices.id, tabFragmentList[position])
                 t.commit()
             }
 
@@ -87,8 +95,13 @@ class HomeActivity : AppCompatActivity() {
             override fun getCount(): Int = tabTitleList.size
 
         })
+
+        btn_home_right_confirm.setOnClickListener {
+
+        }
     }
-    private fun initHome(){
+
+    private fun initHome() {
         iv_home_menu.setOnClickListener {
             drawer_home.openDrawer(Gravity.START)
         }
