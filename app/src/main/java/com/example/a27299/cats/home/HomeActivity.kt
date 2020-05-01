@@ -56,6 +56,8 @@ class HomeActivity : AppCompatActivity() {
     private fun initRight() {
 
         tabFragmentList = listOf(
+                //这里的Module.getCategories()在第一次启动应用时无法得到
+                //debug
                 ChoicesFragment.newInstance(ArrayList(Module.getCategories() ?: listOf())),
                 ChoicesFragment.newInstance(arrayListOf()))
         val transaction = supportFragmentManager.beginTransaction()
