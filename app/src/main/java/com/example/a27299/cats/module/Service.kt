@@ -17,7 +17,7 @@ interface Service {
             @Query("order") order: String,
             @Query("mime_types") type: Array<String>,
             @Query("limit") limit: Int,
-            @Query("category_id") category_ids: Array<Int>? = null): Call<ArrayList<PicsBean>>
+            @Query("category_ids") category_ids: Array<Int>? = null): Call<ArrayList<PicsBean>>
 
     @GET("images/search")
     fun getBreedPic(@Query("breed_ids") breedId: String,

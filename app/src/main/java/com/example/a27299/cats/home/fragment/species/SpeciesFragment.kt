@@ -11,6 +11,7 @@ import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.util.EndlessScrollListener
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.fragment_home_species.view.*
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
@@ -28,7 +29,7 @@ class SpeciesFragment : HomeFragment() {
         view.rv_home_fragment_species.adapter = adapter
         view.rv_home_fragment_species.addOnScrollListener(object : EndlessScrollListener() {
             override fun loadMore() {
-                GlobalScope.launch {
+                GlobalScope.launch(IO) {
                     val n = num.get()
                     if (breedIdList.size > n + 10) {
                         num.addAndGet(10)
@@ -61,7 +62,7 @@ class SpeciesFragment : HomeFragment() {
                 }
             }
         })
-        GlobalScope.launch {
+        GlobalScope.launch(IO) {
             val res = Module.getAllBreeds().execute().body() ?: ArrayList()
             breedIdList.addAll(res.map {
                 it.id

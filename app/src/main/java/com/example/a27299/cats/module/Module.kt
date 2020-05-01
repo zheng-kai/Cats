@@ -10,7 +10,7 @@ object Module {
     val mutableLiveData = MutableLiveData<ArrayList<PicsBean>>()
     val speciesLiveData = MutableLiveData<ArrayList<BreedDetailItem>>()
     val selectedLiveData = MutableLiveData<ArrayList<String>>()
-    val category_ids = ArrayList<Int>()
+    val categoryIds = ArrayList<Int>()
     fun saveCategories(list: ArrayList<Category>) = Hawk.put("categories", list)
     fun getCategories(): ArrayList<Category>? = Hawk.get("categories")
     fun init() {
@@ -19,16 +19,19 @@ object Module {
         speciesLiveData.value = arrayListOf()
     }
 
-    fun addSelected(str: String) {
+    fun addSelected(category: Category) {
         selectedLiveData.value = selectedLiveData.value?.apply {
-            add(str)
+            add(category.name)
         }
+        categoryIds.add(category.id)
     }
 
-    fun remove(str: String) {
+    fun remove(category: Category) {
         selectedLiveData.value = selectedLiveData.value?.apply {
-            remove(str)
+            remove(category.name)
         }
+        categoryIds.remove(category.id)
+
     }
 
     suspend fun getAllBreeds() = ServiceApi.service.getAllBreeds()
@@ -59,15 +62,9 @@ object Module {
     }
 
     suspend fun getPics(order: String = "RANDOM", type: Array<String> = arrayOf("jpg", "png", "gif"), limit: Int = 50, category: Array<Int>? = null) {
-        val response = when (category) {
-            null -> {
-                ServiceApi.service.getPics(order, type, limit).execute()
-            }
-            else -> {
-                ServiceApi.service.getPics(order, type, limit,category).execute()
+        val response = ServiceApi.service.getPics(order, type, limit, categoryIds.toTypedArray()).execute()
 
-            }
-        }
+
         GlobalScope.launch(Main) {
 
 //            mutableLiveData.value = ArrayList<PicsBean>().apply {

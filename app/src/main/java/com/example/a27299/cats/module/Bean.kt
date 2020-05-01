@@ -1,5 +1,8 @@
 package com.example.a27299.cats.module
 
+import android.os.Parcel
+import android.os.Parcelable
+
 
 data class PicsBean(
         val breeds: List<BreedBean>,//猫的种别
@@ -54,71 +57,94 @@ data class Weight(
         val metric: String
 )
 
-data class  Category(
+class Category(
         val id: Int,
         val name: String
-)
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+            parcel.readInt(),
+            parcel.readString()) {
+    }
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.apply {
+            writeInt(id)
+            writeString(name)
+        }
+    }
+
+    override fun describeContents(): Int = 0
+
+    companion object CREATOR : Parcelable.Creator<Category> {
+        override fun createFromParcel(parcel: Parcel): Category {
+            return Category(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Category?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 /**
  * example
 {
-    "breeds": [
-        {
-            "weight": {
-                "imperial": "6 - 13",
-                "metric": "3 - 6"
-            },
-            "id": "buri",
-            "name": "Burmilla",
-            "cfa_url": "http://cfa.org/Breeds/BreedsAB/Burmilla.aspx",
-            "vetstreet_url": "http://www.vetstreet.com/cats/burmilla",
-            "temperament": "Easy Going, Friendly, Intelligent, Lively, Playful, Social",
-            "origin": "United Kingdom",
-            "country_codes": "GB",
-            "country_code": "GB",
-            "description": "The Burmilla is a fairly placid cat. She tends to be an easy cat to get along with, requiring minimal care. The Burmilla is affectionate and sweet and makes a good companion, the Burmilla is an ideal companion to while away a lonely evening. Loyal, devoted, and affectionate, this cat will stay by its owner, always keeping them company.",
-            "life_span": "10 - 15",
-            "indoor": 0,
-            "lap": 1,
-            "alt_names": "",
-            "adaptability": 5,
-            "affection_level": 5,
-            "child_friendly": 4,
-            "dog_friendly": 4,
-            "energy_level": 3,
-            "grooming": 3,
-            "health_issues": 3,
-            "intelligence": 3,
-            "shedding_level": 3,
-            "social_needs": 4,
-            "stranger_friendly": 3,
-            "vocalisation": 5,
-            "experimental": 0,
-            "hairless": 0,
-            "natural": 0,
-            "rare": 0,
-            "rex": 0,
-            "suppressed_tail": 0,
-            "short_legs": 0,
-            "wikipedia_url": "https://en.wikipedia.org/wiki/Burmilla",
-            "hypoallergenic": 0
-        }
-    ],
-    "id": "r530zDuJU",
-    "url": "https://cdn2.thecatapi.com/images/r530zDuJU.jpg",
-    "width": 3504,
-    "height": 2336
+"breeds": [
+{
+"weight": {
+"imperial": "6 - 13",
+"metric": "3 - 6"
+},
+"id": "buri",
+"name": "Burmilla",
+"cfa_url": "http://cfa.org/Breeds/BreedsAB/Burmilla.aspx",
+"vetstreet_url": "http://www.vetstreet.com/cats/burmilla",
+"temperament": "Easy Going, Friendly, Intelligent, Lively, Playful, Social",
+"origin": "United Kingdom",
+"country_codes": "GB",
+"country_code": "GB",
+"description": "The Burmilla is a fairly placid cat. She tends to be an easy cat to get along with, requiring minimal care. The Burmilla is affectionate and sweet and makes a good companion, the Burmilla is an ideal companion to while away a lonely evening. Loyal, devoted, and affectionate, this cat will stay by its owner, always keeping them company.",
+"life_span": "10 - 15",
+"indoor": 0,
+"lap": 1,
+"alt_names": "",
+"adaptability": 5,
+"affection_level": 5,
+"child_friendly": 4,
+"dog_friendly": 4,
+"energy_level": 3,
+"grooming": 3,
+"health_issues": 3,
+"intelligence": 3,
+"shedding_level": 3,
+"social_needs": 4,
+"stranger_friendly": 3,
+"vocalisation": 5,
+"experimental": 0,
+"hairless": 0,
+"natural": 0,
+"rare": 0,
+"rex": 0,
+"suppressed_tail": 0,
+"short_legs": 0,
+"wikipedia_url": "https://en.wikipedia.org/wiki/Burmilla",
+"hypoallergenic": 0
+}
+],
+"id": "r530zDuJU",
+"url": "https://cdn2.thecatapi.com/images/r530zDuJU.jpg",
+"width": 3504,
+"height": 2336
 }
  */
 
 
-
 data class BreedDetailItem(
-    val breeds: List<BreedBean>,
-    val height: Int,
-    val id: String,
-    val url: String,
-    val width: Int
+        val breeds: List<BreedBean>,
+        val height: Int,
+        val id: String,
+        val url: String,
+        val width: Int
 )
 
 

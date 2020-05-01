@@ -8,6 +8,7 @@ import android.os.Bundle
 import com.example.a27299.cats.home.HomeActivity
 import com.example.a27299.cats.module.Module
 import com.example.a27299.cats.module.ServiceApi
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, HomeActivity::class.java))
 //        startActivity(Intent(this, LoginActivity::class.java))
 
-        GlobalScope.launch {
+        GlobalScope.launch(IO) {
             Module.saveCategories(ServiceApi.service.getCategories().execute().body()?: arrayListOf())
         }
         finish()

@@ -13,6 +13,7 @@ import com.example.a27299.cats.module.Module
 import com.example.a27299.cats.module.PicsBean
 import kotlinx.android.synthetic.main.fragment_home_pics.view.*
 import kotlinx.android.synthetic.main.fragment_home_pics.view.rv_home_fragment_pics
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -47,7 +48,7 @@ class PicsFragment : HomeFragment() {
             }
         })
         view.srl_home_fragment_pics.setOnRefreshListener {
-            GlobalScope.launch {
+            GlobalScope.launch(IO) {
                 Module.clear()
                 Module.getPics(limit = PAGE_SIZE)
                 GlobalScope.launch(Main) {
@@ -57,7 +58,7 @@ class PicsFragment : HomeFragment() {
         }
         view.rv_home_fragment_pics.addOnScrollListener(object : EndlessScrollListener() {
             override fun loadMore() {
-                GlobalScope.launch {
+                GlobalScope.launch(IO) {
                     Module.getPics(limit = PAGE_SIZE)
                     enable()
                 }
@@ -65,7 +66,7 @@ class PicsFragment : HomeFragment() {
 
         }
         )
-        GlobalScope.launch {
+        GlobalScope.launch(IO) {
             Module.getPics(limit = PAGE_SIZE)
 
         }

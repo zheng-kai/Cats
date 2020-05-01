@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.Gravity
@@ -14,13 +15,17 @@ import android.view.View
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.HomeFragmentPagerAdapter
-import com.example.a27299.cats.home.fragment.selector.ChoicesFragment
+import com.example.a27299.cats.home.fragment.choices.ChoicesFragment
 import com.example.a27299.cats.login.LoginActivity
+import com.example.a27299.cats.module.Category
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home_right.*
 import kotlinx.android.synthetic.main.activity_home_right.view.*
 import kotlinx.android.synthetic.main.navigation_head.view.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import q.rorbin.verticaltablayout.VerticalTabLayout
 import q.rorbin.verticaltablayout.adapter.TabAdapter
 import q.rorbin.verticaltablayout.widget.ITabView
@@ -51,9 +56,8 @@ class HomeActivity : AppCompatActivity() {
     private fun initRight() {
 
         tabFragmentList = listOf(
-                ChoicesFragment.newInstance(ArrayList(Module.getCategories()?.map { it.name }
-                        ?: listOf())),
-                ChoicesFragment.newInstance(arrayListOf("1", "2", "3", "4", "5")))
+                ChoicesFragment.newInstance(ArrayList(Module.getCategories() ?: listOf())),
+                ChoicesFragment.newInstance(arrayListOf()))
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(layout_right.fl_home_right_choices.id, tabFragmentList[0])
         transaction.commit()
@@ -97,7 +101,11 @@ class HomeActivity : AppCompatActivity() {
         })
 
         btn_home_right_confirm.setOnClickListener {
-
+            GlobalScope.launch(IO) {
+                Module.clear()
+                Module.getPics()
+            }
+            drawer_home.closeDrawer(Gravity.RIGHT)
         }
     }
 
@@ -108,6 +116,7 @@ class HomeActivity : AppCompatActivity() {
         iv_home_filter.setOnClickListener {
             drawer_home.openDrawer(Gravity.RIGHT)
         }
+
         vp_home.adapter = HomeFragmentPagerAdapter(supportFragmentManager,
                 listOf(HomeFragment.newInstance(HomeFragment.PICS_TITLE), HomeFragment.newInstance(HomeFragment.SPECIES_TITLE)))
         tab_home.setupWithViewPager(vp_home)
