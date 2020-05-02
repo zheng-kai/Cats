@@ -20,10 +20,14 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = Color.WHITE
         }
         startActivity(Intent(this, HomeActivity::class.java))
-//        startActivity(Intent(this, LoginActivity::class.java))
 
         GlobalScope.launch(IO) {
-            Module.saveCategories(ServiceApi.service.getCategories().execute().body()?: arrayListOf())
+            val data = ServiceApi.service.getCategories().execute().body()
+            data?.let {
+                if (it != Module.getCategories()) {
+                    Module.saveCategories(it)
+                }
+            }
         }
         finish()
     }

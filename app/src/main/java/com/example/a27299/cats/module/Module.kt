@@ -11,7 +11,10 @@ object Module {
     val speciesLiveData = MutableLiveData<ArrayList<BreedDetailItem>>()
     val selectedLiveData = MutableLiveData<ArrayList<String>>()
     val categoryIds = ArrayList<Int>()
-    fun saveCategories(list: ArrayList<Category>) = Hawk.put("categories", list)
+    fun saveCategories(list: ArrayList<Category>) {
+        Hawk.put("categories", list)
+
+    }
     fun getCategories(): ArrayList<Category>? = Hawk.get("categories")
     fun init() {
         selectedLiveData.value = arrayListOf()

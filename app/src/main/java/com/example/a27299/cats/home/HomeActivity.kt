@@ -19,13 +19,16 @@ import com.example.a27299.cats.home.fragment.choices.ChoicesFragment
 import com.example.a27299.cats.login.LoginActivity
 import com.example.a27299.cats.module.Category
 import com.example.a27299.cats.module.Module
+import com.example.a27299.cats.module.ServiceApi
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home_right.*
 import kotlinx.android.synthetic.main.activity_home_right.view.*
 import kotlinx.android.synthetic.main.navigation_head.view.*
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import q.rorbin.verticaltablayout.VerticalTabLayout
 import q.rorbin.verticaltablayout.adapter.TabAdapter
 import q.rorbin.verticaltablayout.widget.ITabView
@@ -36,7 +39,7 @@ import q.rorbin.verticaltablayout.widget.TabView
 class HomeActivity : AppCompatActivity() {
     private lateinit var verticalTabLayout: VerticalTabLayout
     private val tabTitleList = listOf("种类", "品种")
-    private lateinit var tabFragmentList: List<Fragment>
+    private lateinit var tabFragmentList: List<ChoicesFragment>
     private lateinit var rightAdapter: SelectedAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +58,27 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initRight() {
 
+        val categories = Module.getCategories() ?: arrayListOf()
+
         tabFragmentList = listOf(
                 //这里的Module.getCategories()在第一次启动应用时无法得到
                 //debug
-                ChoicesFragment.newInstance(ArrayList(Module.getCategories() ?: listOf())),
+                ChoicesFragment.newInstance(categories),
                 ChoicesFragment.newInstance(arrayListOf()))
+
+        if (categories.isEmpty()) {
+            GlobalScope.launch(Main) {
+                val data = withContext(IO) {
+                    val data = ServiceApi.service.getCategories().execute().body()?.also {
+                        if (it != Module.getCategories()) {
+                            Module.saveCategories(it)
+                        }
+                    }
+                    data?: arrayListOf()
+                }
+                tabFragmentList[0].setAdapterData(data)
+            }
+        }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(layout_right.fl_home_right_choices.id, tabFragmentList[0])
         transaction.commit()

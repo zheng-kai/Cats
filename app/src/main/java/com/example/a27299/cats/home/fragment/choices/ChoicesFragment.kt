@@ -14,11 +14,12 @@ import java.util.*
 
 
 class ChoicesFragment() : Fragment() {
+    private lateinit var adapter: ChoicesAdapter
+
     companion object {
         fun newInstance(data: ArrayList<Category>) = ChoicesFragment().apply {
             arguments = Bundle().apply {
                 putParcelableArrayList("data", data)
-                Log.d("MyData", data.toString())
             }
         }
 
@@ -28,11 +29,16 @@ class ChoicesFragment() : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home_right_choices, container, false)
         val data = arguments?.getParcelableArrayList<Category>("data") ?: arrayListOf()
         view.rv_home_right_choices.layoutManager = GridLayoutManager(context, 2)
-        view.rv_home_right_choices.adapter = ChoicesAdapter(context, data)
-        Log.d("MyData", data.toString())
+        adapter = ChoicesAdapter(context, data)
+        view.rv_home_right_choices.adapter = adapter
 
         return view
+    }
 
-
+    public fun setAdapterData(data: ArrayList<Category>) {
+        adapter.setData(data)
+        arguments = Bundle().apply {
+            putParcelableArrayList("data", data)
+        }
     }
 }

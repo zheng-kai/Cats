@@ -84,6 +84,25 @@ class Category(
             return arrayOfNulls(size)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) {
+            return true
+        }
+        if (other == null || other !is Category) {
+            return false
+        }
+        if ((other.id == this.id) and (other.name == this.name)) {
+            return true
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        return result
+    }
 }
 
 /**
