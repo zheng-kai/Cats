@@ -16,7 +16,7 @@ data class PicsBean(
 data class BreedBean(
         val adaptability: Int,
         val affection_level: Int,
-        val alt_names: String,
+        val alt_names: String, // 昵称
         val cfa_url: String,
         val child_friendly: Int,
         val country_code: String,

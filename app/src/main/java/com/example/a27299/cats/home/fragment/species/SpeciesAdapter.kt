@@ -2,6 +2,7 @@ package com.example.a27299.cats.home.fragment.species
 
 import android.app.ActionBar
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -42,7 +43,11 @@ class SpeciesAdapter(val context: Context?) : RecyclerView.Adapter<SpeciesViewHo
             }
 
         }
-
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context,SpeciesDetail::class.java)
+            intent.putExtra("position",position)
+            context?.startActivity(intent)
+        }
     }
 
 //    private fun dip2px(context: Context?, dpValue: Float): Int {

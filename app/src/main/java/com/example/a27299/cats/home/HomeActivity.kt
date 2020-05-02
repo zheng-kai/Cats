@@ -11,7 +11,10 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.HomeFragmentPagerAdapter
@@ -51,6 +54,10 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initLeft() {
         val headerView = nv_home_left.getHeaderView(0)
+        nv_home_left.menu.getItem(0).setOnMenuItemClickListener {
+            Toast.makeText(this,"item",Toast.LENGTH_SHORT).show()
+            true
+        }
         headerView.civ_home_left_avatar.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }

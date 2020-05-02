@@ -22,6 +22,7 @@
         <activity android:name=".home.HomeActivity"/>
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".login.RegisterActivity"/>
+        <activity android:name=".home.fragment.species.SpeciesDetail"/>
     </application>
 
 </manifest>
