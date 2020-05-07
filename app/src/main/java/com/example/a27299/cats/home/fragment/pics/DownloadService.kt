@@ -1,9 +1,7 @@
 package com.example.a27299.cats.home.fragment.pics
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -81,12 +79,9 @@ class DownloadService : Service() {
                         .url(url).get().build()
                 val response = client.newCall(request).execute()
                 response.body()?.apply {
-                    val length = contentLength()
                     val input = this.byteStream()
                     val parent = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
                     val file = File(parent, fileName)
-                    Log.d("FilePath", file.path)
                     if (!file.exists()) {
                         val b = file.createNewFile()
                         Log.d("FileCreate", b.toString())
@@ -98,11 +93,10 @@ class DownloadService : Service() {
                     output.flush()
                     output.close()
                     input.close()
-                    notificationBuilder.setProgress(100, 100.toInt(), false)
+                    notificationBuilder.setProgress(100, 100, false)
                             .setContentText("下载完成")
                     notificationManager.notify(nId, notificationBuilder.build())
                     input.close()
-                    Log.d("FileFinish", "y")
                     MediaStore.Images.Media.insertImage(contentResolver, file.absolutePath, fileName, null);
                     sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.absolutePath)))
                 }
