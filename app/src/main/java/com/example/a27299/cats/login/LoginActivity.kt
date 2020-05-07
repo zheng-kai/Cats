@@ -18,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this,RegisterActivity::class.java))
         }
         btn_login.setOnClickListener {
-            Toast.makeText(this,"登录",Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"待开发功能",Toast.LENGTH_LONG).show()
         }
     }
 }

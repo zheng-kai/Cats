@@ -59,7 +59,7 @@ class HomeActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, P
     private fun initLeft() {
         val headerView = nv_home_left.getHeaderView(0)
         nv_home_left.menu.getItem(0).setOnMenuItemClickListener {
-            Toast.makeText(this, "item", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "待开发功能", Toast.LENGTH_SHORT).show()
             true
         }
         headerView.civ_home_left_avatar.setOnClickListener {
