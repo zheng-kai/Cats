@@ -19,6 +19,7 @@ import com.example.a27299.cats.R
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.HomeFragmentPagerAdapter
 import com.example.a27299.cats.home.fragment.choices.ChoicesFragment
+import com.example.a27299.cats.home.fragment.pics.PicsFragment
 import com.example.a27299.cats.login.LoginActivity
 import com.example.a27299.cats.module.Category
 import com.example.a27299.cats.module.Module
@@ -46,6 +47,7 @@ class HomeActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, P
     private lateinit var tabFragmentList: List<ChoicesFragment>
     private lateinit var rightAdapter: SelectedAdapter
     private val PERMISSION_CODE = 111
+    private lateinit var refreshableListener: Refreshable
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -70,8 +72,6 @@ class HomeActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, P
         val categories = Module.getCategories() ?: arrayListOf()
 
         tabFragmentList = listOf(
-                //这里的Module.getCategories()在第一次启动应用时无法得到
-                //debug
                 ChoicesFragment.newInstance(categories),
                 ChoicesFragment.newInstance(arrayListOf()))
 
@@ -131,9 +131,13 @@ class HomeActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, P
         })
 
         btn_home_right_confirm.setOnClickListener {
-            GlobalScope.launch(IO) {
-                Module.clear()
-                Module.getPics()
+            GlobalScope.launch(Main) {
+                refreshableListener.setRefreshing(true)
+                withContext(IO) {
+                    Module.getNewPics()
+                }
+                refreshableListener.setRefreshing(false)
+
             }
             drawer_home.closeDrawer(Gravity.RIGHT)
         }
@@ -146,9 +150,10 @@ class HomeActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, P
         iv_home_filter.setOnClickListener {
             drawer_home.openDrawer(Gravity.RIGHT)
         }
-
+        val homeFragment = HomeFragment.newInstance(HomeFragment.PICS_TITLE) as PicsFragment
+        refreshableListener = homeFragment
         vp_home.adapter = HomeFragmentPagerAdapter(supportFragmentManager,
-                listOf(HomeFragment.newInstance(HomeFragment.PICS_TITLE), HomeFragment.newInstance(HomeFragment.SPECIES_TITLE)))
+                listOf(homeFragment, HomeFragment.newInstance(HomeFragment.SPECIES_TITLE)))
         tab_home.setupWithViewPager(vp_home)
         Module.init()
         tab_home.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -182,12 +187,12 @@ class HomeActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, P
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        Toast.makeText(this,"授权失败",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show()
 
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        Toast.makeText(this,"授权成功",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show()
     }
 
     override fun requestPermission(description: String, permissions: Array<String>, block: () -> Unit) {

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.HomeActivity
+import com.example.a27299.cats.home.Refreshable
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.util.EndlessScrollListener
 import com.example.a27299.cats.module.Module
@@ -19,29 +20,29 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class PicsFragment : HomeFragment() {
+class PicsFragment : HomeFragment(), Refreshable {
     val PAGE_SIZE = 50
     var num = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_home_pics, container, false)
-        val adapter = PicsAdapter(context,activity as HomeActivity)
-        val layoutManager =  StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val adapter = PicsAdapter(context, activity as HomeActivity)
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         view.rv_home_fragment_pics.apply {
             this.adapter = adapter
             addItemDecoration(MyItemDecoration(context, 10f, 2))
             this.layoutManager = layoutManager
         }
-        Module.mutableLiveData.observe(this, Observer<ArrayList<PicsBean>> {
+        Module.picsLiveData.observe(this, Observer<ArrayList<PicsBean>> {
             it?.let {
-                if(it.size == 0){
+                if (it.size == 0) {
                     view.tv_home_fragment_loading_pics.visibility = View.VISIBLE
-                }else{
+                } else {
                     view.tv_home_fragment_loading_pics.visibility = View.INVISIBLE
                 }
-                if(it.size>num){
-                    adapter.notifyItemRangeInserted(num,it.size-num)
+                if (it.size > num) {
+                    adapter.notifyItemRangeInserted(num, it.size - num)
 
-                }else {
+                } else {
                     adapter.notifyDataSetChanged()
 
                 }
@@ -50,8 +51,7 @@ class PicsFragment : HomeFragment() {
         })
         view.srl_home_fragment_pics.setOnRefreshListener {
             GlobalScope.launch(IO) {
-                Module.clear()
-                Module.getPics(limit = PAGE_SIZE)
+                Module.getNewPics()
                 GlobalScope.launch(Main) {
                     view.srl_home_fragment_pics.isRefreshing = false
                 }
@@ -73,6 +73,11 @@ class PicsFragment : HomeFragment() {
         }
 
         return view
+    }
+
+    override fun setRefreshing(enable: Boolean) {
+        view?.srl_home_fragment_pics?.isRefreshing = enable
+
     }
 }
 

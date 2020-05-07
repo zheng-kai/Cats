@@ -1,23 +1,18 @@
 package com.example.a27299.cats.home.fragment.pics
 
-import android.app.ActionBar
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import android.widget.ImageView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.PermissionListener
 import com.example.a27299.cats.module.Module
-import com.example.a27299.cats.module.ServiceApi
 import kotlinx.android.synthetic.main.dialog_item_home_pic.view.*
 import kotlinx.android.synthetic.main.item_home_pic.view.*
-import java.util.jar.Manifest
 
 class PicsViewHolder(itemView: View, val ivPic: ImageView) : RecyclerView.ViewHolder(itemView)
 class PicsAdapter(val context: Context?,private val listener:PermissionListener) : RecyclerView.Adapter<PicsViewHolder>() {
@@ -27,7 +22,7 @@ class PicsAdapter(val context: Context?,private val listener:PermissionListener)
     }
 
     override fun getItemCount(): Int {
-        return Module.mutableLiveData.value?.size ?: 0
+        return Module.picsLiveData.value?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: PicsViewHolder, position: Int) {
@@ -36,14 +31,14 @@ class PicsAdapter(val context: Context?,private val listener:PermissionListener)
         val screenWidth: Int = context?.resources?.displayMetrics?.widthPixels ?: 0
         var width = 0f
         var height = 0f
-        Module.mutableLiveData.value?.get(position)?.apply {
+        Module.picsLiveData.value?.get(position)?.apply {
             width = screenWidth / 2f
             height = width / this.width.toFloat() * this.height + 0.5f
         }
         val lp = StaggeredGridLayoutManager.LayoutParams(width.toInt(), height.toInt())
         holder.itemView.layoutParams = lp
 
-        Module.mutableLiveData.value?.let {
+        Module.picsLiveData.value?.let {
             context?.apply {
                 val url = it[position].url
                 val picId = it[position].id

@@ -7,7 +7,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 object Module {
-    val mutableLiveData = MutableLiveData<ArrayList<PicsBean>>()
+    val picsLiveData = MutableLiveData<ArrayList<PicsBean>>()
     val speciesLiveData = MutableLiveData<ArrayList<BreedDetailItem>>()
     val selectedLiveData = MutableLiveData<ArrayList<String>>()
     val categoryIds = ArrayList<Int>()
@@ -18,7 +18,7 @@ object Module {
     fun getCategories(): ArrayList<Category>? = Hawk.get("categories")
     fun init() {
         selectedLiveData.value = arrayListOf()
-        mutableLiveData.value = arrayListOf()
+        picsLiveData.value = arrayListOf()
         speciesLiveData.value = arrayListOf()
     }
 
@@ -60,25 +60,28 @@ object Module {
 
     fun clear() {
         GlobalScope.launch(Main) {
-            mutableLiveData.value = ArrayList()
+            picsLiveData.value = ArrayList()
         }
     }
+    suspend fun getNewPics(order: String = "RANDOM", type: Array<String> = arrayOf("jpg", "png", "gif"), limit: Int = 50){
+        val response = ServiceApi.service.getPics(order, type, limit, categoryIds.toTypedArray()).execute()
+        response.body()?.apply {
+            GlobalScope.launch(Main) {
+                picsLiveData.value = this@apply
 
-    suspend fun getPics(order: String = "RANDOM", type: Array<String> = arrayOf("jpg", "png", "gif"), limit: Int = 50, category: Array<Int>? = null) {
+            }
+        }
+
+    }
+    suspend fun getPics(order: String = "RANDOM", type: Array<String> = arrayOf("jpg", "png", "gif"), limit: Int = 50) {
         val response = ServiceApi.service.getPics(order, type, limit, categoryIds.toTypedArray()).execute()
 
 
         GlobalScope.launch(Main) {
 
-//            mutableLiveData.value = ArrayList<PicsBean>().apply {
-//                addAll(mutableLiveData.value ?: arrayListOf())
-//                addAll(response.body() ?: arrayListOf())
-//            }
-
-            mutableLiveData.value = mutableLiveData.value?.apply {
+            picsLiveData.value = picsLiveData.value?.apply {
                 addAll(response.body() ?: arrayListOf())
             }
         }
     }
-
 }
