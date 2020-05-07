@@ -6,10 +6,13 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
+import android.provider.MediaStore
 import android.support.annotation.RequiresApi
 import android.util.Log
 import com.example.a27299.cats.R
@@ -79,7 +82,7 @@ class DownloadService : Service() {
                 val response = client.newCall(request).execute()
                 response.body()?.apply {
                     val length = contentLength()
-                    val input = InputStreamReader(this.byteStream())
+                    val input = this.byteStream()
                     val parent = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
                     val file = File(parent, fileName)
@@ -89,31 +92,19 @@ class DownloadService : Service() {
                         Log.d("FileCreate", b.toString())
                     }
 
-                    val fs = FileWriter(file)
-                    var position = 0
-                    var rc = CharArray(1024 * 4)
-                    var r = input.read(rc)
-                    Log.d("download length", length.toString())
-                    while (r != -1) {
-                        fs.write(rc)
-                        position += r
-                        r = input.read(rc)
-
-                        var percent = (position.toFloat() / length) * 100
-                        Log.d("download position", position.toString())
-                        Log.d("download percent", percent.toString())
-                        notificationBuilder.setProgress(100, percent.toInt(), false)
-                        notificationManager.notify(nId, notificationBuilder.build())
-                    }
-                    fs.flush()
-                    fs.close()
+                    val picData = input.readBytes()
+                    val output = FileOutputStream(file)
+                    output.write(picData)
+                    output.flush()
+                    output.close()
+                    input.close()
                     notificationBuilder.setProgress(100, 100.toInt(), false)
                             .setContentText("下载完成")
                     notificationManager.notify(nId, notificationBuilder.build())
                     input.close()
                     Log.d("FileFinish", "y")
-//                    MediaStore.Images.Media.insertImage(contentResolver,file.absolutePath, fileName, null);
-//                    sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.absolutePath)))
+                    MediaStore.Images.Media.insertImage(contentResolver, file.absolutePath, fileName, null);
+                    sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.absolutePath)))
                 }
 
             }
