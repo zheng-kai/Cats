@@ -12,8 +12,10 @@ import com.example.a27299.cats.home.fragment.util.EndlessScrollListener
 import com.example.a27299.cats.module.Module
 import kotlinx.android.synthetic.main.fragment_home_species.view.*
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicInteger
 
 class SpeciesFragment : HomeFragment() {
@@ -29,18 +31,30 @@ class SpeciesFragment : HomeFragment() {
         view.rv_home_fragment_species.adapter = adapter
         view.rv_home_fragment_species.addOnScrollListener(object : EndlessScrollListener() {
             override fun loadMore() {
-                GlobalScope.launch(IO) {
-                    val n = num.get()
-                    if (breedIdList.size > n + 10) {
-                        num.addAndGet(10)
-                        Module.addBreedDetail(breedIdList.subList(n, n + 10))
+                GlobalScope.launch(Main) {
+                    adapter.setLoading("正在加载")
 
-                    } else if (breedIdList.size > n) {
-                        num.addAndGet(breedIdList.size - n)
-                        Module.addBreedDetail(breedIdList.subList(n, breedIdList.size))
-
+                    withContext(IO){
+                        val n = num.get()
+                        if (breedIdList.size > n + 10) {
+                            num.addAndGet(10)
+                            Module.addBreedDetail(breedIdList.subList(n, n + 10))
+                            withContext(Main){
+                                adapter.setLoading("加载更多")
+                            }
+                        } else if (breedIdList.size > n) {
+                            num.addAndGet(breedIdList.size - n)
+                            Module.addBreedDetail(breedIdList.subList(n, breedIdList.size))
+                            withContext(Main){
+                                adapter.setLoading("加载更多")
+                            }
+                        }else{
+                            withContext(Main){
+                                adapter.setLoading("已经到底了")
+                            }
+                        }
+                        enable()
                     }
-                    enable()
                 }
 
             }
