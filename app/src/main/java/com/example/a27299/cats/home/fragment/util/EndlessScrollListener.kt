@@ -8,9 +8,9 @@ import android.widget.LinearLayout
 abstract class EndlessScrollListener : RecyclerView.OnScrollListener() {
     private var slidingUp = false
     private var enable = true
-    override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
-        val manager = recyclerView?.layoutManager
+        val manager = recyclerView.layoutManager
         if(manager is StaggeredGridLayoutManager){
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                 val array = manager.findLastCompletelyVisibleItemPositions(null)
@@ -39,7 +39,7 @@ abstract class EndlessScrollListener : RecyclerView.OnScrollListener() {
 
     }
 
-    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
         slidingUp = dy > 0
     }

@@ -32,7 +32,7 @@
                 app:titleTextAppearance="@style/Toolbar.TitleText"
                 android:id="@+id/toolbar_species_detail"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="48dp"
                 app:layout_collapseMode="pin" >
                 <TextView
                     tools:text="title"

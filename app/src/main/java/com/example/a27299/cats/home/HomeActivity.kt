@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pub.devrel.easypermissions.EasyPermissions
 import q.rorbin.verticaltablayout.VerticalTabLayout
 import q.rorbin.verticaltablayout.adapter.TabAdapter
 import q.rorbin.verticaltablayout.widget.ITabView
@@ -39,11 +40,12 @@ import q.rorbin.verticaltablayout.widget.ITabView.TabTitle
 import q.rorbin.verticaltablayout.widget.TabView
 
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, PermissionListener {
     private lateinit var verticalTabLayout: VerticalTabLayout
     private val tabTitleList = listOf("种类", "品种")
     private lateinit var tabFragmentList: List<ChoicesFragment>
     private lateinit var rightAdapter: SelectedAdapter
+    private val PERMISSION_CODE = 111
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -55,7 +57,7 @@ class HomeActivity : AppCompatActivity() {
     private fun initLeft() {
         val headerView = nv_home_left.getHeaderView(0)
         nv_home_left.menu.getItem(0).setOnMenuItemClickListener {
-            Toast.makeText(this,"item",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "item", Toast.LENGTH_SHORT).show()
             true
         }
         headerView.civ_home_left_avatar.setOnClickListener {
@@ -81,7 +83,7 @@ class HomeActivity : AppCompatActivity() {
                             Module.saveCategories(it)
                         }
                     }
-                    data?: arrayListOf()
+                    data ?: arrayListOf()
                 }
                 tabFragmentList[0].setAdapterData(data)
             }
@@ -171,5 +173,28 @@ class HomeActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        Toast.makeText(this,"授权失败",Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        Toast.makeText(this,"授权成功",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun requestPermission(description: String, permissions: Array<String>, block: () -> Unit) {
+        if (EasyPermissions.hasPermissions(this, *permissions)) {
+            block()
+        } else {
+            EasyPermissions.requestPermissions(this, description, PERMISSION_CODE, *permissions)
+        }
     }
 }

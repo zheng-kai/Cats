@@ -4,6 +4,7 @@ import android.app.ActionBar
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
@@ -11,12 +12,15 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.a27299.cats.R
+import com.example.a27299.cats.home.PermissionListener
 import com.example.a27299.cats.module.Module
+import com.example.a27299.cats.module.ServiceApi
 import kotlinx.android.synthetic.main.dialog_item_home_pic.view.*
 import kotlinx.android.synthetic.main.item_home_pic.view.*
+import java.util.jar.Manifest
 
 class PicsViewHolder(itemView: View, val ivPic: ImageView) : RecyclerView.ViewHolder(itemView)
-class PicsAdapter(val context: Context?) : RecyclerView.Adapter<PicsViewHolder>() {
+class PicsAdapter(val context: Context?,private val listener:PermissionListener) : RecyclerView.Adapter<PicsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PicsViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_home_pic, parent, false)
         return PicsViewHolder(view, view.iv_item_pic)
@@ -42,6 +46,7 @@ class PicsAdapter(val context: Context?) : RecyclerView.Adapter<PicsViewHolder>(
         Module.mutableLiveData.value?.let {
             context?.apply {
                 val url = it[position].url
+                val picId = it[position].id
                 Glide.with(this)
                         .load(url)
                         .placeholder(R.drawable.loading)
@@ -56,8 +61,15 @@ class PicsAdapter(val context: Context?) : RecyclerView.Adapter<PicsViewHolder>(
                 dialogView.iv_dialog_img.setOnClickListener {
                     d.dismiss()
                 }
+
                 dialogView.iv_dialog_download.setOnClickListener {
-                    Toast.makeText(context,"dddd",Toast.LENGTH_SHORT).show()
+                    listener.requestPermission("需要文件读写权限", arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                        val intent = Intent(context,DownloadService::class.java)
+                        intent.putExtra("pic_url",url)
+                        intent.putExtra("pic_id",picId)
+                        startService(intent)
+                    }
+
                 }
                 d.window?.attributes = d.window?.attributes.apply {
                     width = (context.resources.displayMetrics.widthPixels * 0.6).toFloat()

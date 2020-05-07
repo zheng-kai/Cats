@@ -14,7 +14,7 @@ import android.view.View
  */
 
 class MyItemDecoration(private var context: Context, private var interval: Float, private var spanCount: Int) : ItemDecoration() {
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView?, state: RecyclerView.State?) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val params = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
         // 获取item在span中的下标
         val spanIndex = params.spanIndex

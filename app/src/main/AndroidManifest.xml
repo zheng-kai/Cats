@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.a27299.cats">
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".CatApplication"
@@ -23,6 +24,7 @@
         <activity android:name=".login.LoginActivity"/>
         <activity android:name=".login.RegisterActivity"/>
         <activity android:name=".home.fragment.species.SpeciesDetail"/>
+        <service android:name=".home.fragment.pics.DownloadService"/>
     </application>
 
 </manifest>

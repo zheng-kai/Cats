@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.a27299.cats.R
+import com.example.a27299.cats.home.HomeActivity
 import com.example.a27299.cats.home.fragment.HomeFragment
 import com.example.a27299.cats.home.fragment.util.EndlessScrollListener
 import com.example.a27299.cats.module.Module
@@ -23,7 +24,7 @@ class PicsFragment : HomeFragment() {
     var num = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_home_pics, container, false)
-        val adapter = PicsAdapter(context)
+        val adapter = PicsAdapter(context,activity as HomeActivity)
         val layoutManager =  StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         view.rv_home_fragment_pics.apply {
             this.adapter = adapter
