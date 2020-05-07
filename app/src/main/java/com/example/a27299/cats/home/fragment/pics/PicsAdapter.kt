@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import android.widget.ImageView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.a27299.cats.R
 import com.example.a27299.cats.home.PermissionListener
@@ -63,8 +64,9 @@ class PicsAdapter(val context: Context?,private val listener:PermissionListener)
                         intent.putExtra("pic_url",url)
                         intent.putExtra("pic_id",picId)
                         startService(intent)
-                    }
+                        Toast.makeText(context,"开始下载",Toast.LENGTH_SHORT).show()
 
+                    }
                 }
                 d.window?.attributes = d.window?.attributes.apply {
                     width = (context.resources.displayMetrics.widthPixels * 0.6).toFloat()
@@ -84,18 +86,4 @@ class PicsAdapter(val context: Context?,private val listener:PermissionListener)
 
     }
 
-//    private fun dip2px(context: Context?, dpValue: Float): Int {
-//        context?.apply {
-//            val scale = context.resources.displayMetrics.density;
-//            return (dpValue * scale + 0.5f).toInt();
-//        }
-//        return 0
-//    }
-//    private fun px2dip( context:Context?,  pxValue:Float) :Int{
-//        context?.apply {
-//            val scale = context.resources.displayMetrics.density;
-//            return (pxValue / scale + 0.5f).toInt();
-//        }
-//        return 0
-//    }
 }
