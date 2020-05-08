@@ -59,6 +59,10 @@ class DownloadService : Service() {
         notificationBuilder.setSmallIcon(R.mipmap.ic_app)
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_app))
                 .setProgress(100, 0, false)
+                .setAutoCancel(true)
+                .setContentIntent(PendingIntent.getActivity(applicationContext,10086,Intent(Intent.ACTION_VIEW).apply {
+                    type = "image/*"
+                },PendingIntent.FLAG_UPDATE_CURRENT))
         return notificationBuilder
     }
 
